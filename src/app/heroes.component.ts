@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Hero } from './hero';
 
 import { HeroService } from './hero.service';
+import { Router } from '@angular/router';
 
 // const HEROES: Hero[] = [
 //   { id: 11, name: 'Mr. Nice' },
@@ -30,12 +31,20 @@ import { HeroService } from './hero.service';
   <span class="badge">{{hero.id}}</span> {{hero.name}}
   </li>
   </ul>
-  <hero-detail [hero]="selectedHero"></hero-detail>
+  <div *ngIf="selectedHero">
+   <h2>
+     {{selectedHero.name | uppercase}} is my hero
+   </h2>
+   <button (click)="gotoDetail()">View Details</button>
+ </div>
   `,
   providers: []
 })
 export class HeroesComponent {
-  constructor(private heroService: HeroService) { }
+  constructor(
+      private heroService: HeroService,
+      private router: Router,
+  ) { }
   title = 'Tour of Heroes';
   selectedHero: Hero;
   heroes: Hero[];
@@ -50,5 +59,8 @@ export class HeroesComponent {
   }
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
-};
+  }
+  gotoDetail(): void {
+  this.router.navigate(['/detail', this.selectedHero.id]);
+  }
 }
